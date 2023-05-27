@@ -48,7 +48,7 @@ impl RecvPos {
 
             for dd in all_distances.iter().take(10) {
                 let out = format!(
-                    "# SUMMARY  distance: {:.1} ts: {} mmsi: {:9} latlon: {:.6} {:.6} rxnum: {} ship: {}\n",
+                    "# SUMMARY  distance: {7:.1} ts: {} mmsi: {:9} latlon: {:.6} {:.6} rxnum: {:4} ship: {}\n",
                     dd.distance, dd.ts, dd.mmsi, dd.lat, dd.lon, dd.rxnum, dd.ais_is_ship
                 );
                 print!("{out}");
