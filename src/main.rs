@@ -161,8 +161,8 @@ fn main() {
     let socket = UdpSocket::bind("127.0.0.1:10110").unwrap();
     let mut recv = RecvPos::new(args[1].parse().unwrap(), args[2].parse().unwrap());
 
+    let mut buf = [0; 500];
     loop {
-        let mut buf = [0; 200];
         let (amt, _src) = socket.recv_from(&mut buf).unwrap();
         let lines = String::from_utf8(buf[..amt].into()).unwrap();
         for line in lines.split('\n') {
