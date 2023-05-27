@@ -164,7 +164,11 @@ fn main() {
     loop {
         let mut buf = [0; 200];
         let (amt, _src) = socket.recv_from(&mut buf).unwrap();
-        let line = String::from_utf8(buf[..amt].into()).unwrap();
-        ais_row_decoder(&mut recv, &line);
+        let lines = String::from_utf8(buf[..amt].into()).unwrap();
+        for line in lines.split('\n') {
+            if line.len() > 20 {
+                ais_row_decoder(&mut recv, &line);
+            }
+        }
     }
 }
