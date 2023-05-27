@@ -1,3 +1,5 @@
+/* Zsolt Krüpl - 2023. 05. */
+
 fn extractbit(msg: &[u8], mut msg_ptr: usize, mut bitnum: usize) -> u32 {
     let mut num = 0;
     while bitnum > 0 {

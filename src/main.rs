@@ -1,3 +1,5 @@
+/* Zsolt Krüpl - 2023.05. */
+
 use chrono::prelude::*;
 use std::collections::HashMap;
 use std::fs::File;
@@ -46,7 +48,7 @@ impl RecvPos {
 
             for dd in all_distances.iter().take(10) {
                 let out = format!(
-                    "# SUMMARY  distance: {:.1} ts: {} mmsi: {} latlon: {} {} rxnum: {} ship: {}\n",
+                    "# SUMMARY  distance: {:.1} ts: {} mmsi: {:9} latlon: {:.6} {:.6} rxnum: {} ship: {}\n",
                     dd.distance, dd.ts, dd.mmsi, dd.lat, dd.lon, dd.rxnum, dd.ais_is_ship
                 );
                 print!("{out}");
@@ -55,10 +57,10 @@ impl RecvPos {
             self.file.flush().unwrap();
 
             self.mmsi_distance.clear(); // empty HashMap
-            let datetime = Utc::now().format("%Y-%m-%d_%H:%M:%S");
+            let datetime = Utc::now().format("%Y%m%d_%H%M%S");
             self.file = File::create(format!("ais-{datetime}.txt")).unwrap(); // new file
             let out = format!(
-                "# RECEIVER COORDINATES: {} {}  (time: UTC)\n",
+                "# RECEIVER COORDINATES: {:.6} {:.6}  (time: UTC)\n",
                 self.lat, self.lon
             );
             print!("{out}");
@@ -117,14 +119,14 @@ impl RecvPos {
             self.mmsi_distance.insert(aismmsi, ddata);
         }
 
-        let datetime = Utc::now().format("%Y-%m-%d_%H:%M:%S");
+        let datetime = Utc::now().format("%Y-%m-%d %H:%M:%S");
         let plusz: String = if let aismod::Ais::Ais1 { .. } = ais {
-            format!("sog: {aissog:.1} km/h  cog: {aiscog:.1}°")
+            format!("sog: {aissog:4.1} km/h  cog: {aiscog:5.1}°")
         } else {
             "".into()
         };
         let out = format!(
-            ": {distance:7.1} km,  ts: {ts} mmsi: {aismmsi} lat: {aislat} lon: {aislon} {plusz}\n          {datetime} {aisrow}\n",
+            ": {distance:7.1} km,  ts: {ts} ({datetime} UTC) mmsi: {aismmsi:9} latlon: {aislat:.6} {aislon:.6} {plusz}    {aisrow}\n",
         );
         print!("{out}");
         self.file.write(out.as_bytes()).unwrap();
