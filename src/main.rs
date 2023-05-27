@@ -123,7 +123,8 @@ impl RecvPos {
         let plusz: String = if let aismod::Ais::Ais1 { .. } = ais {
             format!("sog: {aissog:4.1} km/h  cog: {aiscog:5.1}°")
         } else {
-            "".into()
+            // "sog:  1.7 km/h  cog: 320.8°"
+            "                           ".into()
         };
         let out = format!(
             ": {distance:7.1} km,  ts: {ts} ({datetime} UTC) mmsi: {aismmsi:9} latlon: {aislat:.6} {aislon:.6} {plusz}    {aisrow}\n",
