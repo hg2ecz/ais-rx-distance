@@ -8,7 +8,7 @@ Usage:
   * build this ( cargo build --release )
 
 ```
-    You can run it two terminals (multiple terminal or screen or nohup)
+    It can running in two terminals (multiple terminal or screen or nohup)
     1. rtl-ais -n                                                              # receive raw AIS
     2. target/release/ais-rx-distance <receiver_latitude> <receiver_longitude> # decode and calculate distance
 ```
