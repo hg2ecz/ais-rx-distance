@@ -4,7 +4,7 @@ Hardware requirements:
    Linux (Raspberry or PC) and rtl-sdr dongle.
 
 Usage:
-  * build rtl-ais ( https://github.com/hg2ecz/rtl-ais ) and run it (./rtl-ais -n)
+  * build rtl-ais: https://github.com/hg2ecz/rtl-ais
   * build this ( cargo build --release )
 
 ```
