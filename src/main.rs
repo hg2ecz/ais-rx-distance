@@ -53,8 +53,10 @@ impl RecvPos {
                 self.file.write(out.as_bytes()).unwrap();
             }
             self.file.flush().unwrap();
+
+            self.mmsi_distance.clear(); // empty HashMap
             let datetime = Utc::now().format("%Y-%m-%d_%H:%M:%S");
-            self.file = File::create(format!("ais-{datetime}.txt")).unwrap();
+            self.file = File::create(format!("ais-{datetime}.txt")).unwrap(); // new file
             let out = format!(
                 "# RECEIVER COORDINATES: {} {}  (time: UTC)\n",
                 self.lat, self.lon

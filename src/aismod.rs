@@ -2,7 +2,7 @@ fn extractbit(msg: &[u8], mut msg_ptr: usize, mut bitnum: usize) -> u32 {
     let mut num = 0;
     while bitnum > 0 {
         let msg_byte = msg_ptr / 6;
-        let msg_bit_inv = msg_ptr % 6; // 0, ha a legfelső bittől minden rendelkezésre áll
+        let msg_bit_inv = msg_ptr % 6;
         let msg_bitct = 6 - msg_bit_inv;
         if msg_bitct <= bitnum {
             num <<= msg_bitct;
@@ -10,7 +10,6 @@ fn extractbit(msg: &[u8], mut msg_ptr: usize, mut bitnum: usize) -> u32 {
             msg_ptr += msg_bitct;
             bitnum -= msg_bitct;
         } else {
-            // byte-ban levőnél kevesebb kell
             num <<= bitnum;
             num |= (msg[msg_byte] >> (6 - bitnum)) as u32;
             msg_ptr += bitnum;
