@@ -116,3 +116,52 @@ pub fn ais_decoder<'a>(ais: &str) -> Result<Ais, &'a str> {
     }
     Ok(Ais::AisUnknown)
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn msg_crcerror() {
+        if let Err(err_txt) = ais_decoder("!AIVDM,1,1,,B,23aDBSPP1UQG;fdK<a2H8Ov42H1M,0*07") {
+            assert_eq!(err_txt, "chksum");
+            return;
+        }
+        panic!();
+    }
+
+    #[test]
+    fn msg1() {
+        if let Ok(ais_res) = ais_decoder("!AIVDM,1,1,,A,23aDBSPP1UQG;fdK<a2H8Ov42H1M,0*07") {
+            if let Ais::Ais1 {
+                mmsi,
+                lat,
+                lon,
+                sog_kmh,
+                cog_deg,
+            } = ais_res
+            {
+                assert_eq!(mmsi, 244650638);
+                assert_eq!(lat, 47.531108333333336);
+                assert_eq!(lon, 19.045476666666666);
+                assert_eq!(sog_kmh, 18.7052);
+                assert_eq!(cog_deg, 208.1);
+                return;
+            }
+        }
+        panic!();
+    }
+
+    #[test]
+    fn msg4() {
+        if let Ok(ais_res) = ais_decoder("!AIVDM,1,1,,A,402DD<ivMN1:`1Fv6bK=PEg02000,0*38") {
+            if let Ais::Ais4 { mmsi, lat, lon } = ais_res {
+                assert_eq!(mmsi, 2430003);
+                assert_eq!(lat, 47.554703333333336);
+                assert_eq!(lon, 18.998968333333334);
+                return;
+            }
+        }
+        panic!();
+    }
+}
