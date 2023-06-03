@@ -52,7 +52,7 @@ impl RecvPos {
                     dd.distance, dd.ts, dd.mmsi, dd.lat, dd.lon, dd.rxnum, dd.ais_is_ship
                 );
                 print!("{out}");
-                self.file.write(out.as_bytes()).unwrap();
+                self.file.write_all(out.as_bytes()).unwrap();
             }
             self.file.flush().unwrap();
 
@@ -64,7 +64,7 @@ impl RecvPos {
                 self.lat, self.lon
             );
             print!("{out}");
-            self.file.write(out.as_bytes()).unwrap();
+            self.file.write_all(out.as_bytes()).unwrap();
         }
 
         let (aismmsi, aislat, aislon, aissog, aiscog) = match ais {
@@ -110,11 +110,7 @@ impl RecvPos {
                 lon: aislon,
                 ts,
                 rxnum: 1,
-                ais_is_ship: if let aismod::Ais::Ais1 { .. } = ais {
-                    true
-                } else {
-                    false
-                },
+                ais_is_ship: matches!(ais, aismod::Ais::Ais1 { .. }),
             };
             self.mmsi_distance.insert(aismmsi, ddata);
         }
@@ -130,7 +126,7 @@ impl RecvPos {
             ": {distance:7.1} km,  ts: {ts} ({datetime} UTC) mmsi: {aismmsi:9} latlon: {aislat:.6} {aislon:.6} {plusz}    {aisrow}\n",
         );
         print!("{out}");
-        self.file.write(out.as_bytes()).unwrap();
+        self.file.write_all(out.as_bytes()).unwrap();
     }
 }
 
@@ -167,7 +163,7 @@ fn main() {
         let lines = String::from_utf8(buf[..amt].into()).unwrap();
         for line in lines.split('\n') {
             if line.len() > 20 {
-                ais_row_decoder(&mut recv, &line);
+                ais_row_decoder(&mut recv, line);
             }
         }
     }
